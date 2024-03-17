@@ -53,11 +53,7 @@ W laboratorium dostępne będą komputery z potrzebnym oprogramowaniem. Chcąc p
     * `sumFloats/1`, która zsumuje elementy będące liczbami zmiennoprzecinkowymi.
 6. Zmodyfikuj funkcję `sumFloats/1` by korzystała z rekurencji ogonowej.
 
-<<<<<<< HEAD
-### Kalkulator ONP
-=======
 ### Kalkulator zanieczyszczenia
->>>>>>> e0be7e9530e77c9d2a7883b4326b6e3a56dfbea1
 1. Na potrzeby testowania zdefiniuj funkcje zwracającą własne, przykładowe dane, zgodne ze strukturą z zadania 3. Dane powinny dotyczyć kilku dni, kilku stacji i kilku rodzajów pomiarów.
 2. Zdefiniuj moduł pozwalający na przetwarzanie danych o jakości powietrza na podstawie listy pomiarów. Moduł dostarczać ma funkcje:
 ```erlang
