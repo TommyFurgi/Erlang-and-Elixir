@@ -1,9 +1,6 @@
 -module(myLists).
 -author("tomci").
 
-%% API
-
-%% API
 -export([containts/2, duplicateElements/1, sumFloats/1, sumFloats2/2, number_of_readings/1, calculate_max/2, get_type_value/2, calculate_mean/2]).
 
 containts([],_) -> false;
