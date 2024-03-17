@@ -53,20 +53,16 @@ W laboratorium dostępne będą komputery z potrzebnym oprogramowaniem. Chcąc p
     * `sumFloats/1`, która zsumuje elementy będące liczbami zmiennoprzecinkowymi.
 6. Zmodyfikuj funkcję `sumFloats/1` by korzystała z rekurencji ogonowej.
 
-### Kalkulator ONP
-* http://pl.wikipedia.org/wiki/Odwrotna_notacja_polska
-* Zapisz w onp następujące wyrażenia :
-    * `1 + 2 * 3 - 4 / 5 + 6`
-    * `1 + 2 + 3 + 4 + 5 + 6 * 7`
-    * `( (4 + 7) / 3 ) * (2 - 19)`
-    * `17 * (31 + 4) / ( (26 - 15) * 2 - 22 ) - 1`
-* Utwórz moduł onp z funkcją `onp/1`, która dla poprawnego wyrażenia ONP zwróci wynik
-    * Funkcja powinna obsługiwać operacje `+`, `-`, `*`, `/` oraz liczby całkowite
-    * do parsowania wyrażenia wykorzystaj funkcję `string:tokens/2` lub `string:lexemes/2`
-    * do konwertowania ciągów znaków na liczby wykorzystaj funkcję `string:to_integer/1`
-    * sprawdź działanie dla zapisanych wyrażeń (https://k144.github.io/narz%C4%99dzia/onp/)
+### Kalkulator zanieczyszczenia
+1. Na potrzeby testowania zdefiniuj funkcje zwracającą własne, przykładowe dane, zgodne ze strukturą z zadania 3. Dane powinny dotyczyć kilku dni, kilku stacji i kilku rodzajów pomiarów.
+2. Zdefiniuj moduł pozwalający na przetwarzanie danych o jakości powietrza na podstawie listy pomiarów. Moduł dostarczać ma funkcje:
+```erlang
+    number_of_readings(Readings, Date) -> int
+    calculate_max(Readings, Type) -> float
+    calculate_mean(Readings, Type) -> float
+```
+3. Funkcje mają być zabezpieczone przed podaniem nieistniejącego typu pomiaru.
 
 ### Zadanie domowe
 1. Dokończ zadania z zajęć.
-2. Dodaj do kalkulatora operacje `sqrt`, `pow` i funkcje trygonometryczne
-3. Dodaj do kalkulatora obsługę liczb zmiennoprzecinkowych w wyrażeniach
+2. Moduł kalkulatora zanieczyszczeń przynieś na kolejne zajęcia.
