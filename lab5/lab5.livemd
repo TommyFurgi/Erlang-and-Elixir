@@ -1,0 +1,141 @@
+# lab5
+
+## Section
+
+```elixir
+defmodule DataLoader do
+  def parseData(line) do
+    [data_time, pollutionType, pollutionLevel, stationId, stationName, location] =
+      line |> String.split(";")
+
+    [day, time] = data_time |> String.split("T")
+
+    day =
+      day
+      |> String.split("-")
+      |> Enum.map(&String.to_integer/1)
+      |> List.to_tuple()
+
+    [time, _] =
+      time
+      |> String.split(".")
+
+    time =
+      time
+      |> String.split(":")
+      |> Enum.map(&String.to_integer/1)
+      |> List.to_tuple()
+
+    %{
+      :datetime => {day, time},
+      :location =>
+        location
+        |> String.split(",")
+        |> Enum.map(&String.to_float/1)
+        |> List.to_tuple(),
+      :stationId => String.to_integer(stationId),
+      :stationName => stationName,
+      :pollutionType => pollutionType,
+      :pollutionLevel => String.to_float(pollutionLevel)
+    }
+  end
+
+  def identifyStations(data) do
+    data
+    |> Enum.map(&{to_string(&1.stationId) <> " " <> &1.stationName, &1.location})
+    |> Enum.uniq_by(& &1)
+  end
+end
+```
+
+```elixir
+lines =
+  File.read!("C:\\Users\\tomci\\Desktop\\AirlyData-ALL-50k.csv")
+  |> String.split("\n")
+
+data =
+  for line <- lines, line != "" do
+    DataLoader.parseData(line)
+  end
+
+stations = data |> DataLoader.identifyStations()
+```
+
+### Erlang Pollution Server
+
+```elixir
+Code.append_path(
+  "C:\\Users\\tomci\\pollution_server\\_build\\default\\lib\\pollution_server\\ebin"
+)
+
+Application.stop(:pollution_server)
+Application.start(:pollution_server)
+
+:pollution_gen_server.get_monitor()
+# :observer.start()
+```
+
+```elixir
+insert_stations = fn ->
+  for {station_name, station_location} <- stations do
+    :pollution_gen_server.add_station(station_name, station_location)
+  end
+end
+
+insert_data = fn ->
+  for record <- data do
+    # if record.pollutionType == "PM10" do
+    :pollution_gen_server.add_value(
+      record.location,
+      record.datetime,
+      record.pollutionType,
+      record.pollutionLevel
+    )
+
+    # end
+  end
+end
+```
+
+```elixir
+defmodule Timer do
+  def get_time_in_sec_and_result(function) do
+    {time_micro_s, result} = function |> :timer.tc()
+    {time_micro_s * 10 ** -6, result}
+  end
+
+  def measure_time_in_sec(function) do
+    function |> get_time_in_sec_and_result |> elem(0)
+  end
+end
+```
+
+```elixir
+insert_stations |> Timer.measure_time_in_sec()
+```
+
+```elixir
+insert_data |> Timer.measure_time_in_sec()
+```
+
+```elixir
+fn ->
+  :gen_server.call(
+    :pollution_gen_server,
+    {:get_station_mean, "9910 Polska, Kraków, Studencka", "PM10"},
+    :infinity
+  )
+end
+|> Timer.get_time_in_sec_and_result()
+```
+
+```elixir
+fn ->
+  :pollution_gen_server.get_daily_mean("PM25", {2024, 2, 10})
+end
+|> Timer.get_time_in_sec_and_result()
+```
+
+```elixir
+:pollution_gen_server.get_monitor()
+```
